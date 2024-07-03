@@ -10,36 +10,23 @@ const createFirebaseApp = () => {
     }
 };
 
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin(async () => {
     const app = createFirebaseApp();
+    const nuxtApp = useNuxtApp();
+    const userCookie = useRequestHeaders().cookie;
 
-    addRouteMiddleware('server-auth', async (to, from) => {
-        const nuxtApp = useNuxtApp();
+    try {
+        const sessionCookie = userCookie?.substring("__session=".length);
 
-        const userCookie = useRequestHeaders().cookie;
-
-        try {
-            const sessionCookie = userCookie?.substring("__session=".length);
-
-            // User has no session
-            if (!sessionCookie && (to.path !== "/login" || to.path !== "/signup")) {
-                throw new Error("No valid session found");
-            } else if (sessionCookie) {
-                const hasSession = await admin.auth().verifySessionCookie(sessionCookie);
-
-                //redirect the user to the login on the server
-                if (!hasSession) {
-                    throw new Error("No valid session found");
-                }
-            }
-        } catch (err) {
-            //console.error(err);
-            return navigateTo({
-                path: '/login',
-                query: {
-                    redirect: to.fullPath,
-                },
-            })
+        // User has no session
+        if (!sessionCookie) {
+            return;
         }
-    }, {global: true})
+
+        const hasSession = await admin.auth().verifySessionCookie(sessionCookie);
+
+        nuxtApp.provide("hasSession", hasSession);
+    } catch (err) {
+        console.error(err);
+    }
 });
