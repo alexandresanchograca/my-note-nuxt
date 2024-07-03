@@ -1,4 +1,4 @@
-import {initializeApp, cert, getApp} from "firebase-admin/app";
+import {initializeApp, getApp} from "firebase-admin/app";
 import admin from "firebase-admin";
 
 const createFirebaseApp = () => {
