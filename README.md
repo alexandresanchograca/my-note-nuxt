@@ -2,6 +2,9 @@
 
 A simple note taking Nuxt Application with firebase connection, that allows Markdown view of your notes.
 
+For the auth to work it is needed to provide an Google Service Account, go to firebase->settings->service account and
+generate a JSON file as key.
+
 ## Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.

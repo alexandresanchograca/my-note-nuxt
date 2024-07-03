@@ -1,7 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     devtools: {enabled: true},
-    modules: ["nuxt-vuefire"],
+    modules: [
+        'nuxt-vuefire',
+    ],
     vuefire: {
         auth: {
             enabled: true,
@@ -15,5 +17,6 @@ export default defineNuxtConfig({
             messagingSenderId: "447538367879",
             appId: "1:447538367879:web:ea462636db079dc6585722"
         },
-    }
+    },
+    compatibilityDate: "2024-07-03",
 })

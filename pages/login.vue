@@ -25,6 +25,7 @@
 const email = ref("");
 const password = ref("");
 const router = useRouter();
+const nuxtApp = useNuxtApp()
 const auth = useFirebaseAuth();
 
 const {error, isPending, login} = useAuth();
@@ -37,8 +38,7 @@ const handleSubmit = async () => {
     return;
   }
 
-  console.log("Login successful");
-  // await router.push({name: "home"});
+  await router.push({name: "index"});
 };
 </script>
 

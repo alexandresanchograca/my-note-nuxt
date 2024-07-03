@@ -35,7 +35,7 @@ const handleSubmit = async () => {
     return;
   }
 
-  // router.push({name: "home"});
+  await router.push({name: "index"});
 };
 </script>
 
