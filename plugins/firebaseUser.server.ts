@@ -25,8 +25,11 @@ export default defineNuxtPlugin(async () => {
 
         const hasSession = await admin.auth().verifySessionCookie(sessionCookie);
 
+
         nuxtApp.provide("hasSession", hasSession);
     } catch (err) {
         console.error(err);
+    } finally {
+        nuxtApp.provide("isServerVerification", true);
     }
 });
