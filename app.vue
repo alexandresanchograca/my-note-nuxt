@@ -11,12 +11,13 @@
 const router = useRouter()
 const route = useRoute()
 const nuxtApp = useNuxtApp()
-const user = useCurrentUser()
 
 
 // Checking if user is authed
 // OnMounted hooks only get called on client
 onMounted(() => {
+  const user = useCurrentUser()
+
   watch(user, (user, prevUser) => {
     // console.log("Watch user", user);
     if (prevUser && !user) {
