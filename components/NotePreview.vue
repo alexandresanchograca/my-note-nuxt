@@ -45,9 +45,9 @@ const handleDelete = async (note) => {
 
 const handleView = (note) => {
   if (note.isPersistent) {
-    router.push({name: "home"});
+    router.push({name: "index"});
   } else if (note.isDaily) {
-    router.push({name: "daily", params: {date: note.id}});
+    router.push(`/daily/${note.id}`);
   } else {
     router.push({name: "note", params: {id: note.id}});
   }
