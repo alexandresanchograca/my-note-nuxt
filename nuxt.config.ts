@@ -3,7 +3,6 @@ export default defineNuxtConfig({
     devtools: {enabled: true},
     modules: [
         'nuxt-vuefire',
-        '@primevue/nuxt-module'
     ],
     vuefire: {
         auth: {
@@ -19,16 +18,14 @@ export default defineNuxtConfig({
             appId: "1:447538367879:web:ea462636db079dc6585722"
         },
     },
-    primevue: {
-        importTheme: {from: '@/themes/app-theme.js'},
-    },
     app: {
         head: {
             title: "My Note",
         },
     },
     css: [
-        "@/assets/css/global.css"
+        "@/assets/css/global.css",
+        'v-calendar/style.css'
     ],
     compatibilityDate: "2024-07-03",
 })
