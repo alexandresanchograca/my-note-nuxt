@@ -1,8 +1,12 @@
+import Aura from '@primevue/themes/aura';
+
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     devtools: {enabled: true},
     modules: [
         'nuxt-vuefire',
+        '@primevue/nuxt-module'
     ],
     vuefire: {
         auth: {
@@ -17,6 +21,16 @@ export default defineNuxtConfig({
             messagingSenderId: "447538367879",
             appId: "1:447538367879:web:ea462636db079dc6585722"
         },
+    },
+    primevue: {
+        options: {
+            theme: {
+                preset: Aura,
+                options: {
+                    darkModeSelector: '.darkness',
+                },
+            },
+        }
     },
     compatibilityDate: "2024-07-03",
 })

@@ -13,8 +13,8 @@ const route = useRoute()
 const nuxtApp = useNuxtApp()
 
 
+//OnMounted hooks only get called on client
 // Checking if user is authed
-// OnMounted hooks only get called on client
 onMounted(() => {
   const user = useCurrentUser()
 
@@ -30,3 +30,6 @@ onMounted(() => {
   })
 })
 </script>
+
+<style>
+</style>
