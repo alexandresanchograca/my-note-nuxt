@@ -1,0 +1,114 @@
+@import url("https://fonts.googleapis.com/css2?family=Jersey+25+Charted&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+/* color variables */
+:root {
+    color-scheme: light dark;
+    --background-col: light-dark(#fafafa, #2e2e2e);
+    --widget-colors: light-dark(white, #424242);
+    --primary: light-dark(#4f515a, #ffffff);
+    --secondary: light-dark(#ebebeb, #6e6363);
+    --warning: #da0f41;
+}
+
+/* base styles  */
+* {
+    font-family: "Jersey Kanit", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: var(--primary);
+}
+
+body {
+    background: var(--background-col);
+}
+
+a {
+    text-decoration: none;
+}
+
+/* buttons */
+button,
+.btn {
+    background: var(--secondary);
+    border-radius: 8px;
+    margin-top: 8px;
+    border: 0;
+    padding: 8px 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.widget-btn {
+    background: var(--widget-colors);
+    border-radius: 8px;
+    margin-top: 8px;
+    border: 0;
+    padding: 8px 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-block;
+}
+
+button:hover,
+.btn:hover {
+    background: var(--primary);
+    color: var(--widget-colors);
+}
+
+button:disabled {
+    opacity: 0.5;
+    color: var(--primary);
+    background: var(--secondary);
+    cursor: not-allowed;
+}
+
+/* forms */
+form {
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 1px 2px 3px rgba(50, 50, 50, 0.05);
+    border: 1px solid var(--secondary);
+    background: var(--widget-colors);
+}
+
+input,
+textarea {
+    border: 0;
+    background-color: var(--widget-colors);
+    border-bottom: 1px solid var(--secondary);
+    padding: 10px;
+    outline: none;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+span.token {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 0px;
+    font-size: medium;
+    color: var(--background-col);
+}
+
+.vc-dot {
+    margin-left: 0px;
+    padding-left: 0px;
+    border-left: 0px;
+}
+
+/* error text */
+.error {
+    color: var(--warning);
+    font-size: 14px;
+    margin: 16px 0;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+}

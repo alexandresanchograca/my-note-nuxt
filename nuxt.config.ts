@@ -18,5 +18,14 @@ export default defineNuxtConfig({
             appId: "1:447538367879:web:ea462636db079dc6585722"
         },
     },
+    app: {
+        head: {
+            title: "My Note",
+        },
+    },
+    css: [
+        "@/assets/css/global.css",
+        'v-calendar/style.css'
+    ],
     compatibilityDate: "2024-07-03",
 })
