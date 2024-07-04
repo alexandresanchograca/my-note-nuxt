@@ -52,7 +52,6 @@ const useDoc = (db, collectionName, subCollectionName) => {
                 documentName = timestamp;
             }
 
-            console.log(db);
             const docRef = doc(db, collectionPath, documentName);
             return await getDoc(docRef);
         } catch (err) {
