@@ -8,7 +8,7 @@
         v-for="note in searchedNotes"
         :key="note.payload"
         :note="note"
-    ></NotePreview>
+    />
   </div>
 </template>
 
@@ -71,7 +71,7 @@ const searchNotes = (notesCollection, searchParams) => {
   //Only the loops are O(n*m)... and the includes is O(k) = O(n*m*k)
   //Using for loops as copium for this
   for (var i = 0; i < notesCollection.length; i++) {
-    const noteTitle = notesCollection[i].title;
+    const noteTitle = notesCollection[i].title?.toLowerCase();
     const notePayload = notesCollection[i].payload.toLowerCase();
     for (var j = 0; j < searchValues.length; j++) {
       if (notePayload.includes(searchValues[j])) {
@@ -79,6 +79,7 @@ const searchNotes = (notesCollection, searchParams) => {
       }
 
       if (noteTitle && noteTitle.includes(searchValues[j])) {
+        console.log("foud", notesCollection[i])
         tempNotes.add(notesCollection[i]);
       }
     }

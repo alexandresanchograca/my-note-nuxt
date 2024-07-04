@@ -25,9 +25,10 @@
 
 <script setup>
 const props = defineProps(["note"]);
+const db = useFirestore();
 
-const {deleteDocument} = useDoc("shared-notes");
-const {deleteDocument: deleteDaily} = useDoc("notes", "daily");
+const {deleteDocument} = useDoc(db, "shared-notes");
+const {deleteDocument: deleteDaily} = useDoc(db, "notes", "daily");
 const user = useCurrentUser()
 const router = useRouter();
 
@@ -49,7 +50,7 @@ const handleView = (note) => {
   } else if (note.isDaily) {
     router.push(`/daily/${note.id}`);
   } else {
-    router.push({name: "note", params: {id: note.id}});
+    router.push(`/note/${note.id}`);
   }
 };
 </script>

@@ -30,7 +30,7 @@ import {Timestamp} from "@firebase/firestore";
 const db = useFirestore();
 const router = useRouter();
 const {getDocuments} = useCol(db);
-const {updateDocument} = useDoc("shared-notes");
+const {updateDocument} = useDoc(db, "shared-notes");
 const user = useCurrentUser()
 
 const {documents: notes, error} = getDocuments(
