@@ -4,45 +4,45 @@ import Aura from '@primevue/themes/aura';
 const Noir = definePreset(Aura, {
     semantic: {
         primary: {
-            50: '{surface.50}',
-            100: '{surface.100}',
-            200: '{surface.200}',
-            300: '{surface.300}',
-            400: '{surface.400}',
-            500: '{surface.500}',
-            600: '{surface.600}',
-            700: '{surface.700}',
-            800: '{surface.800}',
-            900: '{surface.900}',
-            950: '{surface.950}'
+            50: '#272822',
+            100: '#3e3d32',
+            200: '#51514b',
+            300: '#75715e',
+            400: '#a59f85',
+            500: '#f8f8f2',
+            600: '#f92672',
+            700: '#a6e22e',
+            800: '#66d9ef',
+            900: '#ae81ff',
+            950: '#cc6633'
         },
         colorScheme: {
             light: {
                 primary: {
-                    color: '{primary.950}',
+                    color: '#cc6633',
                     contrastColor: '#ffffff',
-                    hoverColor: '{primary.800}',
-                    activeColor: '{primary.700}'
+                    hoverColor: '#ae81ff',
+                    activeColor: '#66d9ef'
                 },
                 highlight: {
-                    background: '{primary.950}',
-                    focusBackground: '{primary.700}',
+                    background: '#cc6633',
+                    focusBackground: '#66d9ef',
                     color: '#ffffff',
                     focusColor: '#ffffff'
                 }
             },
             dark: {
                 primary: {
-                    color: '{primary.50}',
-                    contrastColor: '{primary.950}',
-                    hoverColor: '{primary.200}',
-                    activeColor: '{primary.300}'
+                    color: '#272822',
+                    contrastColor: '#cc6633',
+                    hoverColor: '#51514b',
+                    activeColor: '#75715e'
                 },
                 highlight: {
-                    background: '{primary.50}',
-                    focusBackground: '{primary.300}',
-                    color: '{primary.950}',
-                    focusColor: '{primary.950}'
+                    background: '#272822',
+                    focusBackground: '#75715e',
+                    color: '#cc6633',
+                    focusColor: '#cc6633'
                 }
             }
         }
@@ -50,7 +50,7 @@ const Noir = definePreset(Aura, {
 });
 
 export default {
-    preset: Noir,
+    preset: Aura,
     options: {
         darkModeSelector: '.darkness'
     }

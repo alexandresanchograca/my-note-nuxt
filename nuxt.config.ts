@@ -22,5 +22,13 @@ export default defineNuxtConfig({
     primevue: {
         importTheme: {from: '@/themes/app-theme.js'},
     },
+    app: {
+        head: {
+            title: "My Note",
+        },
+    },
+    css: [
+        "@/assets/css/global.css"
+    ],
     compatibilityDate: "2024-07-03",
 })

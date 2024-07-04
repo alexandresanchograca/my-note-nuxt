@@ -1,24 +1,24 @@
 <template>
   <div class="navbar">
-    <nav>
+    <nav class="flex align-items-center justify-content-between mx-auto">
       <h1>
         <NuxtLink :to="{ name: 'index' }">My-Note</NuxtLink>
         <Button v-if="isDark" label="Light Mode" @click="toggleColorScheme()"/>
         <Button v-if="!isDark" label="Dark Mode" @click="toggleColorScheme()"/>
       </h1>
-      <div class="links">
+      <div class="flex align-items-center">
         <div v-if="user">
           <NuxtLink class="p-button" :to="{ name: 'index' }">Forever Note</NuxtLink>
-          <NuxtLink :to="{ name: 'index' }">Daily Notes</NuxtLink>
-          <NuxtLink :to="{ name: 'index' }">Note List</NuxtLink>
-          <NuxtLink :to="{ name: 'index' }">Search Notes</NuxtLink>
-          <NuxtLink :to="{ name: 'index' }">Help</NuxtLink>
+          <NuxtLink class="p-button" :to="{ name: 'index' }">Daily Notes</NuxtLink>
+          <NuxtLink class="p-button" :to="{ name: 'index' }">Note List</NuxtLink>
+          <NuxtLink class="p-button" :to="{ name: 'index' }">Search Notes</NuxtLink>
+          <NuxtLink class="p-button" :to="{ name: 'index' }">Help</NuxtLink>
           <span class="user-status">Logged in {{ user.email }}</span>
-          <button @click="handleLogout">Logout</button>
+          <Button class="ml-auto" @click="handleLogout">Logout</Button>
         </div>
         <div v-else>
-          <NuxtLink class="btn" :to="{ name: 'signup' }">Signup</NuxtLink>
-          <NuxtLink class="btn" :to="{ name: 'login' }">Login</NuxtLink>
+          <NuxtLink class="p-button p-button-outlined ml-4" :to="{ name: 'signup' }">Signup</NuxtLink>
+          <NuxtLink class="p-button p-button-outlined ml-4" :to="{ name: 'login' }">Login</NuxtLink>
         </div>
       </div>
     </nav>
