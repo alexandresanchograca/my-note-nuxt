@@ -21,6 +21,13 @@ export default defineNuxtConfig({
     app: {
         head: {
             title: "My Note",
+            script: [
+                {
+                    src: "https://kit.fontawesome.com/3210827b43.js",
+                    crossorigin: "anonymous",
+                    defer: true,
+                },
+            ],
         },
     },
     css: [
