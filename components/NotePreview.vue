@@ -66,7 +66,7 @@ const handleView = (note) => {
   gap: 2.8rem;
   height: 140px;
   overflow: hidden;
-  background: #575757;
+  background: var(--widget-background);
 }
 
 .note-title {

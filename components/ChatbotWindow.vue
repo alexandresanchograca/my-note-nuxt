@@ -44,7 +44,7 @@ onUpdated(() => {
   align-self: flex-start;
   padding: 2px 10px;
   border-radius: 8px;
-  background-color: #5f5252;
+  background-color: var(--widget-pill-background);
   font-weight: bold;
   margin-right: 6px;
 }

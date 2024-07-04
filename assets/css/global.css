@@ -7,6 +7,8 @@
     --widget-colors: light-dark(white, #424242);
     --primary: light-dark(#4f515a, #ffffff);
     --secondary: light-dark(#ebebeb, #6e6363);
+    --widget-background: light-dark(#ffffff, #575757);
+    --widget-pill-background: light-dark(#ffffff, #5f5252);
     --warning: #da0f41;
 }
 
