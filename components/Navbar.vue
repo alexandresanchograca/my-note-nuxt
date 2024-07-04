@@ -12,7 +12,7 @@
           <NuxtLink :to="{ name: 'daily' }">Daily Notes</NuxtLink>
           <NuxtLink :to="{ name: 'shared' }">Note List</NuxtLink>
           <NuxtLink :to="{ name: 'search' }">Search Notes</NuxtLink>
-          <NuxtLink :to="{ name: 'index' }">Help</NuxtLink>
+          <NuxtLink :to="{ name: 'chatbot' }">Help</NuxtLink>
           <span class="user-status">Logged in {{ user.email }}</span>
           <button @click="handleLogout">Logout</button>
         </div>
