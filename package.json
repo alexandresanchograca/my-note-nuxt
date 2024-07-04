@@ -16,8 +16,10 @@
     "firebase": "^10.12.2",
     "firebase-admin": "^11.11.1",
     "firebase-functions": "^4.9.0",
+    "marked": "^4.1.0",
     "nuxt": "^3.12.3",
     "nuxt-vuefire": "^1.0.2",
+    "prismjs": "^1.29.0",
     "v-calendar": "^3.1.2",
     "vue": "latest"
   },
