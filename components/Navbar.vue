@@ -44,19 +44,12 @@ const handleLogout = async () => {
 
 
 onMounted(() => {
-  let isLightSystem = window.matchMedia('(prefers-color-scheme: light)');
-
-  //Remove darkness if the system color is light
-  if (isLightSystem.matches) {
-    isDark.value = false;
-    const element = document.querySelector('html');
-    element.classList.toggle('darkness');
-  }
+  isDark.value = window.matchMedia('(prefers-color-scheme: dark)');
 });
 
 const toggleColorScheme = () => {
-  const element = document.querySelector('html');
-  element.classList.toggle('darkness');
+  const element = document.querySelector(':root');
+  element.style.colorScheme = isDark.value ? 'light' : 'dark';
   isDark.value = !isDark.value;
 }
 </script>

@@ -16,7 +16,6 @@ async function getAllNotesContext(user, db) {
     /* Getting persistent note */
     const {getDocument, error: docError} = useDoc(db, "notes");
     const persistentDoc = await getDocument(user.value.uid);
-    console.log(persistentDoc);
     const content = "Note title: [Persistent Note]. Content: [" + persistentDoc.data().payload + ']';
     messages.value.push({
         role: "user", content
