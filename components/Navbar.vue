@@ -3,8 +3,9 @@
     <nav>
       <h1>
         <NuxtLink :to="{ name: 'index' }">My-Note</NuxtLink>
-        <button v-if="isDark" label="Light Mode" @click="toggleColorScheme()">L</button>
-        <button v-if="!isDark" label="Dark Mode" @click="toggleColorScheme()">D</button>
+        <button v-if="isDark" label="Light Mode" @click="toggleColorScheme()"><i class="fa-regular fa-sun"></i></button>
+        <button v-if="!isDark" label="Dark Mode" @click="toggleColorScheme()"><i class="fa-regular fa-moon"></i>
+        </button>
       </h1>
       <div class="links">
         <div v-if="user">
