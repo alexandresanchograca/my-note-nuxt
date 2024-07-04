@@ -8,7 +8,7 @@
       </h1>
       <div class="links">
         <div v-if="user">
-          <NuxtLink :to="{ name: 'index' }">Forever Note</NuxtLink>
+          <NuxtLink class="p-button" :to="{ name: 'index' }">Forever Note</NuxtLink>
           <NuxtLink :to="{ name: 'index' }">Daily Notes</NuxtLink>
           <NuxtLink :to="{ name: 'index' }">Note List</NuxtLink>
           <NuxtLink :to="{ name: 'index' }">Search Notes</NuxtLink>
