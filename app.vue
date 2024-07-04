@@ -21,7 +21,6 @@ onMounted(() => {
   const user = useCurrentUser()
 
   watch(user, (user, prevUser) => {
-    // console.log("Watch user", user);
     if (prevUser && !user) {
       // user logged out
       router.push('/login')
