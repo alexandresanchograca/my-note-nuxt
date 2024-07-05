@@ -1,11 +1,13 @@
 <template>
   <div class="note-calendar">
-    <DatePicker
-        transparent
-        :attributes="attrs"
-        v-model="date"
-        :is-required="true"
-    ></DatePicker>
+    <ClientOnly>
+      <DatePicker
+          transparent
+          :attributes="attrs"
+          v-model="date"
+          :is-required="true"
+      ></DatePicker>
+    </ClientOnly>
   </div>
 </template>
 

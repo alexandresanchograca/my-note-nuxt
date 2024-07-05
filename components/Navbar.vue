@@ -11,7 +11,7 @@
         <div v-if="user">
           <NuxtLink :to="{ name: 'index' }">Forever Note</NuxtLink>
           <NuxtLink :to="{ name: 'daily' }">Daily Notes</NuxtLink>
-          <NuxtLink :to="{ name: 'shared' }">Note List</NuxtLink>
+          <NuxtLink :to="{ name: 'note-list' }">Note List</NuxtLink>
           <NuxtLink :to="{ name: 'search' }">Search Notes</NuxtLink>
           <NuxtLink :to="{ name: 'chatbot' }">Help</NuxtLink>
           <span class="user-status">Logged in {{ user.email }}</span>

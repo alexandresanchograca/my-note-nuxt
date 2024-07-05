@@ -54,7 +54,7 @@ const handleSubmit = async () => {
     return;
   }
 
-  router.push({name: "shared"});
+  router.push({name: "note-list"});
 };
 </script>
 
@@ -87,7 +87,7 @@ button:disabled {
   display: flex;
   align-items: center;
   font-size: 1.2rem;
-  border: 0px;
+  border: 0;
   border-bottom: 1px;
   border-color: rgb(222, 222, 220);
   border-style: dashed;

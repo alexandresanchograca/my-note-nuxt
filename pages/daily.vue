@@ -3,14 +3,12 @@
     <button @click="wasViewClicked = true">View in markdown</button>
     <NuxtPage v-model="dailyDate"/>
     <div class="daily-notes">
-      <ClientOnly>
-        <NoteCalendar class="calendar-col" v-model="selectedDate"></NoteCalendar>
-        <DailyNote
-            class="note-col"
-            :selectedDate="selectedDate"
-            :wasViewClicked="wasViewClicked"
-        ></DailyNote>
-      </ClientOnly>
+      <NoteCalendar class="calendar-col" v-model="selectedDate"></NoteCalendar>
+      <DailyNote
+          class="note-col"
+          :selectedDate="selectedDate"
+          :wasViewClicked="wasViewClicked"
+      ></DailyNote>
     </div>
   </div>
 </template>
