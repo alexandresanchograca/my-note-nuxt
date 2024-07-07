@@ -14,7 +14,7 @@
 
 <script setup>
 const db = useFirestore();
-const user = useCurrentUser()
+const user = useState("userState");
 const searchValue = ref("");
 const searchedNotes = ref([]);
 

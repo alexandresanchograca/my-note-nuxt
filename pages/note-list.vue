@@ -31,7 +31,7 @@ const db = useFirestore();
 const router = useRouter();
 const {getDocuments} = useCol(db);
 const {updateDocument} = useDoc(db, "shared-notes");
-const user = useCurrentUser()
+const user = useState("userState");
 
 const {documents: notes, error} = getDocuments(
     "shared-notes",
