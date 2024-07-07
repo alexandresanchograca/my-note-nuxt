@@ -21,12 +21,7 @@ import "prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js"; // show c
 import "prismjs/plugins/show-language/prism-show-language.js";
 
 const messages = ref([]);
-const app = useFirebaseApp();
-const db = useFirestore();
-const user = useCurrentUser();
-
-const {ask, error, isPending} = useNoteAgent(user, db, app, true);
-const {executeAction} = useAIActions(user, db);
+const user = useState("userState");
 
 marked.use({
   highlight: (code, lang) => {
@@ -38,6 +33,8 @@ marked.use({
   },
 });
 
+//Assigned only later due to SSR. onMounted only executes on client.
+let ask, error, isPending, executeAction;
 onMounted(() => {
   const message = "Hi!, How can I help you today";
   const formattedMessage = marked.parse(message);
@@ -48,7 +45,19 @@ onMounted(() => {
     created: Date.now(),
     message: formattedMessage,
   });
+
+  const app = useFirebaseApp();
+  const db = useFirestore();
+
+  const agentData = useNoteAgent(user, db, app, true);
+  const actionData = useAIActions(user, db);
+
+  ask = agentData.ask;
+  error = agentData.error;
+  isPending = agentData.isPending;
+  executeAction = actionData.executeAction;
 });
+
 
 const handleSubmit = async (userMessage) => {
   messages.value.push(userMessage);

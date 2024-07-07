@@ -1,13 +1,19 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     devtools: {enabled: true},
+    nitro: {
+        preset: 'firebase',
+        firebase: {
+            gen: 2.
+        },
+    },
     modules: [
         'nuxt-vuefire',
     ],
     vuefire: {
         auth: {
             enabled: true,
-            sessionCookie: true
+            sessionCookie: false,
         },
         config: {
             apiKey: "AIzaSyDT8G6-tLNkusP1UpAe8Ix5rqE_7Yjb4Ok",
