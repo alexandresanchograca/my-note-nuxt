@@ -7,7 +7,6 @@ export default defineEventHandler(async (event) => {
     const userCookie = event.headers.get("cookie");
 
     try {
-
         const sessionCookie = userCookie?.substring("__session=".length);
 
         // User has no session
