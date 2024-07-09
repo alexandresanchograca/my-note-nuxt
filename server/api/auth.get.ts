@@ -1,12 +1,12 @@
 import admin from "firebase-admin";
 import createFirebaseApp from "~/server/utils/firebaseApp";
 
+
 export default defineEventHandler(async (event) => {
-    const app = createFirebaseApp();
+    const app = await createFirebaseApp();
     const userCookie = event.headers.get("cookie");
 
     try {
-
         const sessionCookie = userCookie?.substring("__session=".length);
 
         // User has no session
