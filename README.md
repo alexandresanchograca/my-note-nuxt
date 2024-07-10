@@ -5,6 +5,12 @@ A simple note taking Nuxt Application with firebase connection, that allows Mark
 For the auth to work it is needed to provide an Google Service Account, go to firebase->settings->service account and
 generate a JSON file as key.
 
+To choose a database please create a .env file and assign the values "firebase" or "supabase":
+
+```angular2html
+DB_CHOICE="firebase"
+```
+
 ## Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.

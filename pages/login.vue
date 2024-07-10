@@ -22,16 +22,20 @@
 </template>
 
 <script setup>
+import useAuthF from "~/composables/authentication/useAuthF.ts";
+
 const email = ref("");
 const password = ref("");
 const router = useRouter();
-const nuxtApp = useNuxtApp()
 const auth = useFirebaseAuth();
+const authSb = useSupabaseClient();
 
-const {error, isPending, login} = useAuth();
+// const {error, isPending, login} = useAuth();
+
+const {login, error, isPending} = useAuthF(auth, authSb.auth);
 
 const handleSubmit = async () => {
-  const res = await login(auth, email.value, password.value);
+  const res = await login(email.value, password.value);
 
   if (error.value) {
     console.log(error.value);

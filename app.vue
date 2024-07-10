@@ -9,11 +9,18 @@
 </template>
 
 <script setup lang="ts">
-
 const router = useRouter()
 const route = useRoute()
 const nuxtApp = useNuxtApp()
 
+const dbAuth: DBAuth = {
+  fbAuth: useFirebaseAuth(),
+  fbDatabase: useFirestore(),
+  sbDatabase: useSupabaseClient(),
+  sbAuth: useSupabaseClient().auth,
+}
+
+const dbConnection = useState<DBAuth>("dbConnection", () => dbAuth);
 
 //OnMounted hooks only get called on client
 // Checking if user is authed

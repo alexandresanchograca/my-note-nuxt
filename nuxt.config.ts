@@ -7,9 +7,7 @@ export default defineNuxtConfig({
             gen: 2.
         },
     },
-    modules: [
-        'nuxt-vuefire',
-    ],
+    modules: ['nuxt-vuefire', "@nuxtjs/supabase"],
     vuefire: {
         auth: {
             enabled: true,
@@ -23,6 +21,9 @@ export default defineNuxtConfig({
             messagingSenderId: "447538367879",
             appId: "1:447538367879:web:ea462636db079dc6585722"
         },
+    },
+    supabase: {
+        // Options
     },
     app: {
         head: {

@@ -20,6 +20,7 @@
 
 <script setup>
 import {Timestamp} from "@firebase/firestore";
+import useDocF from "~/composables/database/useDocF.ts";
 
 const note = ref("");
 const fontSize = ref(16);
@@ -35,6 +36,10 @@ const {
   error,
   isPending,
 } = useDoc(db, "notes");
+
+const dbSb = useSupabaseClient();
+
+const {getDoc} = useDocF(db, dbSb, "notes");
 
 const handleSubmit = async () => {
   let savedNote = {
@@ -56,12 +61,14 @@ const handleView = async () => {
   router.push({name: "viewer", state: {payload: note.value}});
 };
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   const {document: doc} = getDocumentRealtime(user.value.uid);
+  const data = await getDoc(user.value.uid);
+  console.log("data: ", data);
 
   watch(doc, () => {
     isDocChanged.value = true;
-    note.value = doc.value.payload;
+    note.value = doc.value?.payload;
   });
 
   watch(note, () => {
