@@ -22,20 +22,19 @@
 </template>
 
 <script setup>
-import useAuthF from "~/composables/authentication/useAuthF.ts";
+import useAuthDao from "~/composables/daos/authentication/authDao.ts";
 
 const email = ref("");
 const password = ref("");
 const router = useRouter();
-const auth = useFirebaseAuth();
-const authSb = useSupabaseClient();
 
-// const {error, isPending, login} = useAuth();
-
-const {login, error, isPending} = useAuthF(auth, authSb.auth);
+const authDao = useAuthDao();
+const {error, isPending, login} = authDao;
 
 const handleSubmit = async () => {
   const res = await login(email.value, password.value);
+
+  console.log("RES: ", res);
 
   if (error.value) {
     console.log(error.value);

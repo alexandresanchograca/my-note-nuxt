@@ -1,7 +1,6 @@
 import type {Ref} from "vue";
 import type {Timestamp} from "@firebase/firestore";
 import type {Auth} from "@firebase/auth";
-import {firestore} from "firebase-admin";
 
 export {};
 
@@ -9,10 +8,20 @@ declare global {
     type Some<T> = T | null | undefined;
 
     type DBAuth = {
-        fbAuth: Auth | null | undefined;
-        fbDatabase: any;
-        sbDatabase: any;
-        sbAuth: any;
+        auth: any;
+        db: any;
+    }
+
+    type UserCreds = {
+        uid: string;
+        email: string | null;
+        username?: string | null;
+    }
+
+    type BasicDao<T> = {
+        saveOrUpdate();
+        read(): T;
+        delete();
     }
 
     type BasicNote = {
@@ -20,24 +29,17 @@ declare global {
         payload: string;
     }
 
-    type BasicDao = {
-        db: object;
-        saveOrUpdate();
-        read();
-        delete();
-    }
+    type PersistentNote = {}
 
-    type PersistentNoteDao = {}
+    type DailyNote = {}
 
-    type DailyNoteDao = {}
-
-    type NoteDao = {}
+    type Note = {}
 
     type AuthDao = {
-        login(auth, email, password);
-        signup(auth, email, password);
-        logout(auth);
+        login(auth, email, password): Promise<UserCreds | undefined>;
+        signup(auth, email, password): Promise<UserCreds | undefined>;
+        logout(auth): Promise<void>;
         error: Ref<any>;
         isPending: Ref<boolean>;
-    }
+    } | null;
 }

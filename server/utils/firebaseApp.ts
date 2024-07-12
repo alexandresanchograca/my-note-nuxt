@@ -6,7 +6,7 @@ const getFirebaseAdminCredentials = async (): Promise<any> => {
 
     try {
         const request = {
-            name: 'projects/447538367879/secrets/FIREBASE_ADMIN_CREDENTIALS/versions/1'
+            name: 'projects/447538367879/secrets/FIREBASE_ADMIN_CREDENTIALS/versions/latest'
         }
 
         const response = await secretManagerClient.accessSecretVersion(request);

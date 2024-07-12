@@ -8,7 +8,6 @@ export default defineEventHandler(async (event) => {
 
     try {
         const sessionCookie = userCookie?.substring("__session=".length);
-
         // User has no session
         if (!sessionCookie) {
             throw new Error(

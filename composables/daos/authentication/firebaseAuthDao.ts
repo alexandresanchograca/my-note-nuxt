@@ -1,14 +1,12 @@
 import {ref} from "vue";
-import {
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    signOut,
-} from "firebase/auth";
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "firebase/auth";
 
 const error = ref(null);
 const isPending = ref(false);
 
-const login = async (auth, email, password) => {
+const login = async (email: string, password: string): Promise<UserCreds | undefined> => {
+    const dbConnection = useState<DBAuth>("dbConnection");
+    const auth = dbConnection.value.auth;
     error.value = null;
     isPending.value = true;
 
@@ -19,7 +17,11 @@ const login = async (auth, email, password) => {
             throw new Error("Couldn't sign in...");
         }
 
-        return res;
+        return {
+            uid: res.user.uid,
+            email: res.user.email,
+            username: res.user.displayName
+        };
     } catch (err) {
         error.value = "Username or password are incorrect, please try again...";
     } finally {
@@ -27,7 +29,9 @@ const login = async (auth, email, password) => {
     }
 };
 
-const signup = async (auth, email, password) => {
+const signup = async (email: string, password: string): Promise<UserCreds | undefined> => {
+    const dbConnection = useState<DBAuth>("dbConnection");
+    const auth = dbConnection.value.auth;
     error.value = null;
     isPending.value = true;
 
@@ -38,7 +42,12 @@ const signup = async (auth, email, password) => {
             throw new Error("Couldn't sign up...");
         }
 
-        return res;
+
+        return {
+            uid: res.user.uid,
+            email: res.user.email,
+            username: res.user.displayName
+        };
     } catch (err) {
         error.value = err.message;
     } finally {
@@ -46,7 +55,9 @@ const signup = async (auth, email, password) => {
     }
 };
 
-const logout = async (auth) => {
+const logout = async () => {
+    const dbConnection = useState<DBAuth>("dbConnection");
+    const auth = dbConnection.value.auth;
     error.value = null;
     try {
         return await signOut(auth);
@@ -55,8 +66,8 @@ const logout = async (auth) => {
     }
 };
 
-const useAuth = () => {
+const useFirebaseAuthDao = (): AuthDao => {
     return {error, isPending, login, logout, signup};
 };
 
-export default useAuth;
+export default useFirebaseAuthDao;
