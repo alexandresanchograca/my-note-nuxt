@@ -7,6 +7,12 @@ generate a JSON file as key.
 
 To choose a database please create a .env file and assign the values "firebase" or "supabase":
 
+TODO:
+
+- Meter getters nas notas do supabase e firebase.
+- Fazer a tabela no supabase para as shared-notes
+- Testar...
+
 ```angular2html
 DB_CHOICE="firebase"
 ```
