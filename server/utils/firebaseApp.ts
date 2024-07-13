@@ -1,20 +1,8 @@
 import {cert, getApp, initializeApp, ServiceAccount} from "firebase-admin/app";
-import {SecretManagerServiceClient} from "@google-cloud/secret-manager";
 
 const getFirebaseAdminCredentials = async (): Promise<any> => {
-    const secretManagerClient = new SecretManagerServiceClient();
-
     try {
-        const request = {
-            name: 'projects/447538367879/secrets/FIREBASE_ADMIN_CREDENTIALS/versions/latest'
-        }
-
-        const response = await secretManagerClient.accessSecretVersion(request);
-
-        if (response?.length) {
-            const payload = response[0].payload.data.toString();
-            return JSON.parse(atob(payload));
-        }
+        return JSON.parse(atob(process.env.ADMIN_CREDS));
     } catch (err) {
         console.log("error:", err);
     }
