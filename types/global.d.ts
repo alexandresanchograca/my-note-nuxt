@@ -10,6 +10,8 @@ declare global {
     type DBAuth = {
         auth: any;
         db: any;
+        fbAuth: any;
+        fbDb: any;
     }
 
     type UserCreds = {
@@ -19,9 +21,12 @@ declare global {
     }
 
     type BasicDao<T> = {
-        saveOrUpdate();
-        read(): T;
-        delete();
+        save?(id: string, content: T);
+        update?(id: string, content: T);
+        saveOrUpdate(id: string, content: T);
+        find(id: string): T;
+        findAll?(): Array<T>;
+        remove(id: string);
     }
 
     type BasicNote = {
@@ -29,11 +34,16 @@ declare global {
         payload: string;
     }
 
-    type PersistentNote = {}
+    type PersistentNote = BasicNote;
 
-    type DailyNote = {}
+    type DailyNote = BasicNote & {
+        title: string;
+    }
 
-    type Note = {}
+    type Note = BasicNote & {
+        title: string;
+        users: Array<any>;
+    }
 
     type AuthDao = {
         login(auth, email, password): Promise<UserCreds | undefined>;
@@ -41,5 +51,11 @@ declare global {
         logout(auth): Promise<void>;
         error: Ref<any>;
         isPending: Ref<boolean>;
+    } | null;
+
+    type DatabaseDao = {
+        persistent: BasicDao<PersistentNote>;
+        daily: BasicDao<DailyNote>;
+        note: BasicDao<Note>;
     } | null;
 }

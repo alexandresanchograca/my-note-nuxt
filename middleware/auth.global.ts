@@ -35,11 +35,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         }
     } catch (err) {
         console.log("Error: ", err.message);
-        return navigateTo({
-            path: '/login',
-            query: {
-                redirect: to.fullPath,
-            },
-        });
+        // return navigateTo({
+        //     path: '/login',
+        //     query: {
+        //         redirect: to.fullPath,
+        //     },
+        // });
     }
 });

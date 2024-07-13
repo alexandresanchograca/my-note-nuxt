@@ -20,26 +20,16 @@
 
 <script setup>
 import {Timestamp} from "@firebase/firestore";
-import useDocF from "~/composables/database/useDocF.ts";
+import useDatabaseDao from "~/composables/daos/database/databaseDao.ts";
 
 const note = ref("");
 const fontSize = ref(16);
 const isNoteSaved = ref(true);
 const isDocChanged = ref(false);
 const router = useRouter();
-const user = useCurrentUser()
-const db = useFirestore();
+const user = useState("userDetails");
 
-const {
-  getDocumentRealtime,
-  setDocument,
-  error,
-  isPending,
-} = useDoc(db, "notes");
-
-const dbSb = useSupabaseClient();
-
-const {getDoc} = useDocF(db, dbSb, "notes");
+const {find, saveOrUpdate, error, isPending} = useDatabaseDao().persistent;
 
 const handleSubmit = async () => {
   let savedNote = {
@@ -47,7 +37,7 @@ const handleSubmit = async () => {
     modifiedAt: Timestamp.fromDate(new Date()),
   };
 
-  await setDocument(user.value.uid, savedNote);
+  await saveOrUpdate(user.value.uid, savedNote);
 
   if (error.value) {
     return;
@@ -62,21 +52,15 @@ const handleView = async () => {
 };
 
 onBeforeMount(async () => {
-  const {document: doc} = getDocumentRealtime(user.value.uid);
-  const data = await getDoc(user.value.uid);
-  console.log("data: ", data);
+  console.log("user", user);
 
-  watch(doc, () => {
-    isDocChanged.value = true;
-    note.value = doc.value?.payload;
-  });
+  const doc = await find(user.value.uid);
+  note.value = doc.payload;
+
+  console.log("data: ", doc);
 
   watch(note, () => {
-    if (!isDocChanged.value) {
-      isNoteSaved.value = false;
-    } else {
-      isDocChanged.value = false;
-    }
+    isNoteSaved.value = false;
   });
 });
 

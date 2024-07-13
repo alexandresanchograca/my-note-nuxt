@@ -34,6 +34,9 @@ const {error, isPending, login} = authDao;
 const handleSubmit = async () => {
   const res = await login(email.value, password.value);
 
+  console.log("login response: ", res);
+  const user = useState("userDetails", () => res);
+
   if (error.value) {
     console.log(error.value);
     return;
