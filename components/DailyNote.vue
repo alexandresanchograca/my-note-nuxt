@@ -16,6 +16,8 @@
 </template>
 
 <script setup>
+import useDatabaseDao from "~/composables/daos/database/databaseDao.ts";
+
 const props = defineProps(["selectedDate", "wasViewClicked"]);
 
 const note = ref("");
@@ -23,13 +25,16 @@ const fontSize = ref(16);
 const isNoteSaved = ref(true);
 const isNewlyLoadedNote = ref(true);
 const isDocChanged = ref(false);
-const user = useCurrentUser()
+
+const user = useState("userDetails");
 const db = useFirestore();
 
-const {getDocumentRealtime, setDocument, deleteDocument, error, isPending} =
+const {getDocumentRealtime, setDocument, deleteDocument} =
     useDoc(db, "notes", "daily");
 
 const router = useRouter();
+
+const {find, saveOrUpdate, error, isPending} = useDatabaseDao().daily;
 
 const handleSubmit = async () => {
   if (!note.value) {
@@ -55,26 +60,16 @@ const handleSubmit = async () => {
   }
 };
 
-let unWatchDoc = null;
-const handleGetDoc = () => {
-  const {document: doc} = getDocumentRealtime(
-      user.value.uid,
-      props.selectedDate
-  );
+const handleGetDoc = async () => {
+  const doc = await find(props.selectedDate);
 
-  if (unWatchDoc) {
-    //Removing old listener
-    unWatchDoc();
+  console.log("DailyNote: ", doc);
+
+  if (doc) {
+    note.value = doc.payload;
+  } else {
+    note.value = "";
   }
-
-  unWatchDoc = watch(doc, () => {
-    isDocChanged.value = true;
-    if (doc.value) {
-      note.value = doc.value.payload;
-    } else {
-      note.value = "";
-    }
-  });
 
   isNewlyLoadedNote.value = true;
   isNoteSaved.value = true;
@@ -93,8 +88,7 @@ const handlePropsChange = () => {
   }
 };
 
-onBeforeMount(() => {
-  handleGetDoc();
+onBeforeMount(async () => {
   watch(props, handlePropsChange);
 
   const unWatch = watch(note, () => {

@@ -24,7 +24,7 @@ declare global {
         save?(id: string, content: T);
         update?(id: string, content: T);
         saveOrUpdate(id: string, content: T);
-        find(id: string): T;
+        find(id: string): Promise<T>;
         findAll?(): Array<T>;
         remove(id: string);
     }
@@ -37,7 +37,7 @@ declare global {
     type PersistentNote = BasicNote;
 
     type DailyNote = BasicNote & {
-        title: string;
+        title?: string;
     }
 
     type Note = BasicNote & {

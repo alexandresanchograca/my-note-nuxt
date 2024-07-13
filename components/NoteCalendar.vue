@@ -16,7 +16,7 @@ import {DatePicker} from "v-calendar";
 
 const date = ref(new Date());
 const attrs = ref(null);
-const user = useState("userState");
+const user = useState("userDetails");
 const db = useFirestore();
 
 const selectedDate = defineModel();

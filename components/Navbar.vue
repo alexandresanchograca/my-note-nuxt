@@ -29,7 +29,7 @@
 <script setup>
 const {error, logout} = useAuth();
 const router = useRouter();
-const user = useState("userState");
+const user = useState("userDetails");
 const auth = useFirebaseAuth();
 const isDark = ref(true);
 
