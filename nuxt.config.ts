@@ -3,7 +3,7 @@ export default defineNuxtConfig({
     devtools: {enabled: true},
     runtimeConfig: {
         public: {
-            databaseOption: 'supabase'
+            databaseOption: 'supabase',
         }
     },
     nitro: {
@@ -13,6 +13,10 @@ export default defineNuxtConfig({
         },
     },
     modules: ['nuxt-vuefire', "@nuxtjs/supabase"],
+    supabase: {
+        url: "https://hvhjnuydfzuzembulxaq.supabase.co",
+        key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh2aGpudXlkZnp1emVtYnVseGFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjA1MzAyNzAsImV4cCI6MjAzNjEwNjI3MH0.9hWVGPKAzgscuCHN0GRefWBErv4pQKPlG6AsCAf01i4"
+    },
     vuefire: {
         auth: {
             enabled: true,

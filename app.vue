@@ -18,6 +18,8 @@ const nuxtApp = useNuxtApp()
 // Checking if user is authed
 onMounted(() => {
   const dbAuth: DBAuth = {
+    fbDb: useFirestore(),
+    fbAuth: useFirebaseAuth(),
     db: useSupabaseClient(),
     auth: useSupabaseClient().auth,
   }

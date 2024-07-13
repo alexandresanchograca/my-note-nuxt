@@ -6,10 +6,10 @@ const useAuthDao = (): AuthDao => {
 
     let auth: AuthDao = null;
     switch (databaseOption) {
-        case "supabase":
+        case "firebase":
             auth = useFirebaseAuthDao();
             break;
-        case "firebase":
+        case "supabase":
             auth = useSupabaseAuthDao();
             break;
         default:
