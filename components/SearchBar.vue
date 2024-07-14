@@ -13,56 +13,31 @@
 </template>
 
 <script setup>
+import useDatabaseDao from "~/composables/daos/database/databaseDao.ts";
+
 const db = useFirestore();
-const user = useState("userState");
+
+const user = useState("userDetails");
 const searchValue = ref("");
 const searchedNotes = ref([]);
 
+const {persistent, daily, note} = useDatabaseDao();
+
 /* Getting persistent note */
-const {getDocumentRealtime, error: docError} = useDoc(db, "notes");
-const {document: doc} = getDocumentRealtime(user.value.uid);
+const doc = await persistent.find(user.value.uid);
+searchedNotes.value.push({...doc, isPersistent: true});
+console.log("persistentNoteSearch: ", doc);
+
 
 /* Getting note list (shared notes)*/
-const {getDocuments} = useCol(db);
-const {documents: notes, error} = getDocuments(
-    "shared-notes",
-    ["users", "array-contains", user.value.email],
-    ["owner", "==", user.value.email]
-);
+const notes = await note.findAll();
+notes.forEach((note) => searchedNotes.value.push(note));
+console.log("NoteSearch: ", notes);
 
 /* Getting daily notes */
-const {getSubcollectionDocuments} = useCol(db);
-const {documents: dailyNotes, error: dailyError} = getSubcollectionDocuments(
-    "notes",
-    user.value.uid,
-    "daily"
-);
-
-watch(
-    notes,
-    () => {
-      notes.value.forEach((note) => searchedNotes.value.push(note));
-    },
-    {once: true}
-);
-
-watch(
-    doc,
-    () => {
-      searchedNotes.value.push({...doc.value, isPersistent: true});
-    },
-    {once: true}
-);
-
-watch(
-    dailyNotes,
-    () => {
-      dailyNotes.value.forEach((note) =>
-          searchedNotes.value.push({...note, isDaily: true})
-      );
-    },
-    {once: true}
-);
+const dailyNotes = await daily.findAll();
+dailyNotes.forEach((note) => searchedNotes.value.push({...note, isDaily: true}));
+console.log("DailySearch: ", dailyNotes);
 
 const searchNotes = (notesCollection, searchParams) => {
   const searchValues = searchParams.toLowerCase().split(" ");
@@ -79,7 +54,7 @@ const searchNotes = (notesCollection, searchParams) => {
       }
 
       if (noteTitle && noteTitle.includes(searchValues[j])) {
-        console.log("foud", notesCollection[i])
+        console.log("found", notesCollection[i])
         tempNotes.add(notesCollection[i]);
       }
     }
@@ -89,14 +64,14 @@ const searchNotes = (notesCollection, searchParams) => {
 };
 
 const handleSearch = () => {
-  searchedNotes.value = searchNotes(notes.value, searchValue.value);
+  searchedNotes.value = searchNotes(notes, searchValue.value);
 
   searchNotes(
-      [{...doc.value, isPersistent: true}],
+      [{...doc, isPersistent: true}],
       searchValue.value
   ).forEach((note) => searchedNotes.value.push(note));
 
-  const searchedDailyNotes = searchNotes(dailyNotes.value, searchValue.value);
+  const searchedDailyNotes = searchNotes(dailyNotes, searchValue.value);
 
   searchedDailyNotes.forEach((note) =>
       searchedNotes.value.push({...note, isDaily: true})

@@ -84,6 +84,7 @@ const firebaseNote = () => {
 
     return {
         find,
+        findAll,
         saveOrUpdate,
         remove,
         error,

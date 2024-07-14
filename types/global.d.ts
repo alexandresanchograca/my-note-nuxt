@@ -24,9 +24,11 @@ declare global {
         save?(id: string, content: T);
         update?(id: string, content: T);
         saveOrUpdate(id: string, content: T);
-        find(id: string): Promise<T>;
-        findAll?(): Array<T>;
+        find(id: string): Promise<T | undefined>;
+        findAll?(): Promise<Array<T> | undefined>;
         remove(id: string);
+        error: Ref<any>;
+        isPending: Ref<boolean>;
     }
 
     type BasicNote = {
@@ -42,6 +44,7 @@ declare global {
 
     type Note = BasicNote & {
         title: string;
+        owner: string;
         users: Array<any>;
     }
 

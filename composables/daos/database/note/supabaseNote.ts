@@ -1,15 +1,16 @@
 import {ref} from "vue";
 
-const supabaseNote = () => {
+const supabaseNote = (): BasicDao<Note> => {
     //Assigning db
     const {db} = useState<DBAuth>("dbConnection").value;
 
     //Instance related variables
+    const user = useState("userDetails");
     const collectionName = "notes";
     const error = ref("");
     const isPending = ref(false);
 
-    const find = async (id: number) => {
+    const find = async (id: string): Promise<Note | undefined> => {
         error.value = "";
         isPending.value = true;
 
@@ -28,6 +29,48 @@ const supabaseNote = () => {
         } catch (err) {
             console.error(err);
             error.value = "Couldn't retrieve note, try again later...";
+        } finally {
+            isPending.value = false;
+        }
+    };
+
+    const findAll = async (): Promise<Note[] | undefined> => {
+        const dbConnection = useState<DBAuth>("dbConnection");
+        const db = dbConnection.value.db;
+
+        error.value = "";
+        isPending.value = true;
+
+        try {
+            const {data: notes, error: fetchError} = await db
+                .from("shared_notes")
+                .select(`
+                notes (
+                    id,
+                    title,
+                    payload,
+                    modifiedAt,
+                    owner:profiles(
+                    id,
+                    email
+                    )
+                )
+            `);
+
+            console.log("Raw notes:", notes);
+
+            if (fetchError) {
+                throw fetchError;
+            }
+
+            const massagedNotes = notes.map((note) => ({
+                ...note.notes, owner: note.notes.owner?.email
+            }));
+
+            return massagedNotes;
+        } catch (err) {
+            error.value = "Couldn't retrieve notes, try again later...";
+            console.log(err);
         } finally {
             isPending.value = false;
         }
@@ -93,6 +136,7 @@ const supabaseNote = () => {
 
     return {
         find,
+        findAll,
         saveOrUpdate,
         remove,
         error,

@@ -33,6 +33,28 @@ const supabaseDailyNote = () => {
         }
     };
 
+    const findAll = async () => {
+        error.value = "";
+        isPending.value = true;
+
+        try {
+            const {data: notes, error: fetchError} = await db
+                .from(collectionName)
+                .select('*');
+
+            if (fetchError) {
+                throw fetchError;
+            }
+
+            return notes;
+        } catch (err) {
+            console.error(err);
+            error.value = "Couldn't retrieve note, try again later...";
+        } finally {
+            isPending.value = false;
+        }
+    }
+
     const saveOrUpdate = async (id: string, content: PersistentNote) => {
         error.value = "";
         isPending.value = true;
@@ -93,6 +115,7 @@ const supabaseDailyNote = () => {
 
     return {
         find,
+        findAll,
         saveOrUpdate,
         remove,
         error,

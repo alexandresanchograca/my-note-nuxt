@@ -29,7 +29,7 @@ const db = useFirestore();
 
 const {deleteDocument} = useDoc(db, "shared-notes");
 const {deleteDocument: deleteDaily} = useDoc(db, "notes", "daily");
-const user = useCurrentUser()
+const user = useState("userDetails");
 const router = useRouter();
 
 const isOwner = (note) => {

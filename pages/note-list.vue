@@ -26,18 +26,17 @@
 <script setup>
 import NotePreview from "@/components/NotePreview.vue";
 import {Timestamp} from "@firebase/firestore";
+import useDatabaseDao from "~/composables/daos/database/databaseDao.ts";
 
 const db = useFirestore();
 const router = useRouter();
-const {getDocuments} = useCol(db);
 const {updateDocument} = useDoc(db, "shared-notes");
-const user = useState("userState");
 
-const {documents: notes, error} = getDocuments(
-    "shared-notes",
-    ["users", "array-contains", user.value.email],
-    ["owner", "==", user.value.email]
-);
+const {find, findAll, saveOrUpdate, error, isPending} = useDatabaseDao().note;
+
+const notes = await findAll();
+
+console.log("note-list: ", notes);
 
 const startDrag = (event, index) => {
   event.dataTransfer.setData("noteIndex", index);

@@ -1,8 +1,9 @@
 import {
+    collection,
     deleteDoc,
     doc,
-    getDoc,
-    setDoc,
+    getDoc, getDocs, or, orderBy, query,
+    setDoc, where,
 } from "firebase/firestore";
 import {ref} from "vue";
 
@@ -11,6 +12,7 @@ const firebaseDailyNote = () => {
     const {fbDb: db} = useState<DBAuth>("dbConnection").value;
 
     //Instance related variables
+    const user = useState("userDetails");
     const collectionName = "notes";
     const subCollectionName = "daily";
     const error = ref("");
@@ -31,6 +33,28 @@ const firebaseDailyNote = () => {
             isPending.value = false;
         }
     };
+
+    const findAll = async () => {
+        error.value = "";
+        isPending.value = true;
+
+        try {
+            const collectionPath = `${collectionName}/${user.value.uid}/${subCollectionName}`;
+            const colRef = collection(db, collectionPath);
+
+            const q = query(
+                colRef,
+            );
+
+            const querySnapshot = await getDocs(q);
+
+            return querySnapshot.docs.map((doc) => doc.data());
+        } catch (err) {
+            error.value = err.message;
+        } finally {
+            isPending.value = false;
+        }
+    }
 
     const saveOrUpdate = async (id: string, content: PersistentNote) => {
         error.value = "";
@@ -63,6 +87,7 @@ const firebaseDailyNote = () => {
 
     return {
         find,
+        findAll,
         saveOrUpdate,
         remove,
         error,
