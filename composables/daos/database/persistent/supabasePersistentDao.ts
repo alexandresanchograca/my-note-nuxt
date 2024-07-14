@@ -7,7 +7,7 @@ const supabasePersistentNote = () => {
 
     //Instance related variables
     const user = useState("userDetails");
-    const collectionName = "notes";
+    const collectionName = 'persistent_notes';
     const error = ref("");
     const isPending = ref(false);
 
@@ -17,7 +17,7 @@ const supabasePersistentNote = () => {
 
         try {
             const {data: note, error: fetchError} = await db
-                .from('persistent_notes')
+                .from(collectionName)
                 .select('*')
                 .eq("user_id", id)
                 .single();
@@ -47,7 +47,7 @@ const supabasePersistentNote = () => {
             if (dbNote) {
                 // Update existing note
                 result = await db
-                    .from('persistent_notes')
+                    .from(collectionName)
                     .update({
                         ...content,
                         modifiedAt: content.modifiedAt.toISOString(),
@@ -86,7 +86,7 @@ const supabasePersistentNote = () => {
 
         try {
             const {data, error: deleteError} = await db
-                .from('persistent_notes')
+                .from(collectionName)
                 .delete()
                 .eq('id', id);
 

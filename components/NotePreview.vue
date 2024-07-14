@@ -37,7 +37,7 @@ const isOwner = (note) => {
 
 const handleDelete = async (note) => {
   if (note.isDaily) {
-    await dbDaily.remove(note.id);
+    await dbDaily.remove(note.title);
   } else {
     await dbNote.remove(note.id);
   }
