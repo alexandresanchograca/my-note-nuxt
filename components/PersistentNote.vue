@@ -19,7 +19,6 @@
 </template>
 
 <script setup>
-import {Timestamp} from "@firebase/firestore";
 import useDatabaseDao from "~/composables/daos/database/databaseDao.ts";
 
 const note = ref("");
@@ -34,7 +33,7 @@ const {find, saveOrUpdate, error, isPending} = useDatabaseDao().persistent;
 const handleSubmit = async () => {
   let savedNote = {
     payload: note.value,
-    modifiedAt: Timestamp.fromDate(new Date()),
+    modifiedAt: new Date(),
   };
 
   await saveOrUpdate(user.value.uid, savedNote);

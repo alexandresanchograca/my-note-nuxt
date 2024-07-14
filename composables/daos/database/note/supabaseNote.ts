@@ -231,6 +231,15 @@ const supabaseNote = (): BasicDao<Note> => {
                 throw deleteError;
             }
 
+            //Delete from notes aswell
+            const {data: foo, error: deleteNotesError} = await db
+                .from("notes")
+                .delete()
+                .eq('id', id);
+
+            if (deleteError) {
+                throw deleteError;
+            }
             return data;
         } catch (err) {
             console.error(err);

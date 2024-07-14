@@ -1,15 +1,17 @@
 import {ref} from "vue";
+import {user} from "firebase-functions/v1/auth";
 
 const supabasePersistentNote = () => {
     //Assigning db
     const {db} = useState<DBAuth>("dbConnection").value;
 
     //Instance related variables
+    const user = useState("userDetails");
     const collectionName = "notes";
     const error = ref("");
     const isPending = ref(false);
 
-    const find = async (id: number) => {
+    const find = async (id: string) => {
         error.value = "";
         isPending.value = true;
 
@@ -38,18 +40,29 @@ const supabasePersistentNote = () => {
         isPending.value = true;
 
         try {
+            const dbNote = await find(id);
+
+            console.log("content: ", content);
             let result;
-            if (id) {
+            if (dbNote) {
                 // Update existing note
                 result = await db
                     .from('persistent_notes')
-                    .update(content)
-                    .eq('id', id);
+                    .update({
+                        ...content,
+                        modifiedAt: content.modifiedAt.toISOString(),
+                        user_id: user.value.uid
+                    })
+                    .eq('user_id', id);
             } else {
                 // Insert new note
                 result = await db
                     .from('persistent_notes')
-                    .insert(content);
+                    .insert({
+                        ...content,
+                        modifiedAt: content.modifiedAt.toISOString(),
+                        user_id: user.value.uid
+                    });
             }
 
             const {data, error: upsertError} = result;

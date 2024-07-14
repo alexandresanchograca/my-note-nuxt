@@ -24,13 +24,12 @@
 </template>
 
 <script setup>
-const props = defineProps(["note"]);
-const db = useFirestore();
+import useDatabaseDao from "~/composables/daos/database/databaseDao.ts";
 
-const {deleteDocument} = useDoc(db, "shared-notes");
-const {deleteDocument: deleteDaily} = useDoc(db, "notes", "daily");
+const props = defineProps(["note"]);
 const user = useState("userDetails");
 const router = useRouter();
+const {daily: dbDaily, note: dbNote} = useDatabaseDao();
 
 const isOwner = (note) => {
   return note.isPersistent || note.isDaily || note.owner === user.value.email;
@@ -38,9 +37,9 @@ const isOwner = (note) => {
 
 const handleDelete = async (note) => {
   if (note.isDaily) {
-    await deleteDaily(user.value.uid, note.id);
+    await dbDaily.remove(note.id);
   } else {
-    await deleteDocument(note.id);
+    await dbNote.remove(note.id);
   }
 };
 
