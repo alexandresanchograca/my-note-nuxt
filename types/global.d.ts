@@ -43,6 +43,7 @@ declare global {
     type PersistentNote = BasicNote;
 
     type DailyNote = BasicNote & {
+        id?: string;
         title?: string;
     }
 

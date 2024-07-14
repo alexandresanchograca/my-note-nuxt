@@ -1,15 +1,17 @@
 import {ref} from "vue";
+import DailyNote from "~/components/DailyNote.vue";
 
 const supabaseDailyNote = () => {
     //Assigning db
     const {db} = useState<DBAuth>("dbConnection").value;
 
     //Instance related variables
+    const user = useState("userDetails");
     const collectionName = "daily_notes";
     const error = ref("");
     const isPending = ref(false);
 
-    const find = async (id: number) => {
+    const find = async (id: string) => {
         error.value = "";
         isPending.value = true;
 
@@ -20,9 +22,7 @@ const supabaseDailyNote = () => {
                 .eq("title", id)
                 .single();
 
-            if (fetchError) {
-                throw fetchError;
-            }
+            error.value = fetchError;
 
             return note;
         } catch (err) {
@@ -55,23 +55,34 @@ const supabaseDailyNote = () => {
         }
     }
 
-    const saveOrUpdate = async (id: string, content: PersistentNote) => {
+    const saveOrUpdate = async (id: string, content: DailyNote) => {
         error.value = "";
         isPending.value = true;
 
         try {
+            const noteInDb = await find(id);
+            console.log("save daily: ", noteInDb);
+
             let result;
-            if (id) {
+            if (noteInDb) {
                 // Update existing note
                 result = await db
                     .from(collectionName)
-                    .update(content)
+                    .update({
+                        ...content,
+                        modifiedAt: content.modifiedAt.toISOString(),
+                        user_id: user.value.uid
+                    })
                     .eq('title', id);
             } else {
                 // Insert new note
                 result = await db
                     .from(collectionName)
-                    .insert(content);
+                    .insert({
+                        ...content,
+                        modifiedAt: content.modifiedAt.toISOString(),
+                        user_id: user.value.uid
+                    });
             }
 
             const {data, error: upsertError} = result;

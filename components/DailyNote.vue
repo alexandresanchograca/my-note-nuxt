@@ -19,26 +19,17 @@
 import useDatabaseDao from "~/composables/daos/database/databaseDao.ts";
 
 const props = defineProps(["selectedDate", "wasViewClicked"]);
-
 const note = ref("");
 const fontSize = ref(16);
 const isNoteSaved = ref(true);
 const isNewlyLoadedNote = ref(true);
 const isDocChanged = ref(false);
-
-const user = useState("userDetails");
-const db = useFirestore();
-
-const {getDocumentRealtime, setDocument, deleteDocument} =
-    useDoc(db, "notes", "daily");
-
 const router = useRouter();
-
-const {find, saveOrUpdate, error, isPending} = useDatabaseDao().daily;
+const {find, saveOrUpdate, remove, error, isPending} = useDatabaseDao().daily;
 
 const handleSubmit = async () => {
   if (!note.value) {
-    await deleteDocument(user.value.uid, props.selectedDate);
+    await remove(props.selectedDate);
 
     if (error.value) {
       return;
@@ -46,11 +37,14 @@ const handleSubmit = async () => {
 
     isNoteSaved.value = true;
   } else {
+
     let savedNote = {
+      title: props.selectedDate,
       payload: note.value,
+      modifiedAt: new Date()
     };
 
-    await setDocument(user.value.uid, savedNote, props.selectedDate);
+    await saveOrUpdate(props.selectedDate, savedNote);
 
     if (error.value) {
       return;

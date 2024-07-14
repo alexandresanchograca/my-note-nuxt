@@ -113,24 +113,33 @@ const supabaseNote = (): BasicDao<Note> => {
                 throw noteError;
             }
 
-            const noteId = noteData?.[0]?.note_id;
+            const noteId = noteData?.[0]?.id;
+
+            const {data: ownUserEntry, error: entryError} = await db
+                .from("shared_notes")
+                .insert({
+                    note_id: noteId,
+                    user_id: user.value.uid,
+                });
+
+            if (entryError) {
+                throw entryError;
+            }
 
             // Insert shared users into the shared_notes table
-            const sharedUsers = note.users.map(sharedUser => ({
+            const sharedUsers = note.users.map(noteUser => ({
                 note_id: noteId,
-                user_id: sharedUser
+                user_id: noteUser
             }));
 
             console.log("sharedUsers: ", sharedUsers);
 
-            if (sharedUsers.length > 0) {
-                const {error: sharedError} = await db
-                    .from("shared_notes")
-                    .insert(sharedUsers);
+            const {data: sharedUsersRes, error: sharedError} = await db
+                .from("shared_notes")
+                .insert(sharedUsers);
 
-                if (sharedError) {
-                    throw sharedError;
-                }
+            if (sharedError) {
+                throw sharedError;
             }
 
             return noteData[0];

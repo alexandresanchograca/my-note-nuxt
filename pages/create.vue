@@ -16,11 +16,10 @@
 </template>
 
 <script setup>
-import {Timestamp} from "@firebase/firestore";
+import useDatabaseDao from "~/composables/daos/database/databaseDao.ts";
 
 const router = useRouter();
-const user = useCurrentUser();
-const db = useFirestore();
+const user = useState("userDetails");
 
 const note = ref({
   title: "",
@@ -31,7 +30,7 @@ const note = ref({
 
 const sharedUsers = ref([]);
 
-const {addDocument, error, isPending} = useDoc(db, "shared-notes");
+const {save, error, isPending} = useDatabaseDao().note;
 
 const handleSubmit = async () => {
   note.value.users = sharedUsers.value
@@ -45,10 +44,10 @@ const handleSubmit = async () => {
 
   let savedNote = {
     ...note.value,
-    modifiedAt: Timestamp.fromDate(new Date()),
+    modifiedAt: new Date(),
   };
 
-  await addDocument(savedNote);
+  await save(savedNote);
 
   if (error.value) {
     return;
