@@ -28,8 +28,7 @@ const isDocChanged = ref(false);
 const router = useRouter();
 const user = useState("userDetails");
 
-const {find, saveOrUpdate, error, isPending} = useDatabaseDao().persistent;
-
+let find, saveOrUpdate, error, isPending;
 const handleSubmit = async () => {
   let savedNote = {
     payload: note.value,
@@ -51,6 +50,7 @@ const handleView = async () => {
 };
 
 onBeforeMount(async () => {
+  ({find, saveOrUpdate, error, isPending} = useDatabaseDao().persistent)
   console.log("user", user);
 
   const doc = await find(user.value.uid);

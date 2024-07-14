@@ -27,11 +27,13 @@
 </template>
 
 <script setup>
-const {error, logout} = useAuth();
+import authDao from "~/composables/daos/authentication/authDao.ts";
+
 const router = useRouter();
 const user = useState("userDetails");
 const auth = useFirebaseAuth();
 const isDark = ref(true);
+const {logout, error, isPending} = authDao();
 
 const handleLogout = async () => {
   const res = await logout(auth);

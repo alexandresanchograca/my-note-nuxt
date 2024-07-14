@@ -9,9 +9,7 @@ To choose a database please create a .env file and assign the values "firebase" 
 
 TODO:
 
-- Meter getters nas notas do supabase e firebase.
-- Fazer a tabela no supabase para as shared-notes
-- Testar...
+- Mover toda a logica de obter dados para API e usar os server/admin SDK's dos serviços para obter dados.
 
 ```angular2html
 DB_CHOICE="firebase"

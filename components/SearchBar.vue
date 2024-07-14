@@ -19,23 +19,24 @@ const user = useState("userDetails");
 const searchValue = ref("");
 const searchedNotes = ref([]);
 
-const {persistent, daily, note} = useDatabaseDao();
+onMounted(async () => {
+  const {persistent, daily, note} = useDatabaseDao();
 
-/* Getting persistent note */
-const doc = await persistent.find(user.value.uid);
-searchedNotes.value.push({...doc, isPersistent: true});
-console.log("persistentNoteSearch: ", doc);
+  /* Getting persistent note */
+  const doc = await persistent.find(user.value.uid);
+  searchedNotes.value.push({...doc, isPersistent: true});
+  console.log("persistentNoteSearch: ", doc);
 
+  /* Getting note list (shared notes)*/
+  const notes = await note.findAll();
+  notes.forEach((note) => searchedNotes.value.push(note));
+  console.log("NoteSearch: ", notes);
 
-/* Getting note list (shared notes)*/
-const notes = await note.findAll();
-notes.forEach((note) => searchedNotes.value.push(note));
-console.log("NoteSearch: ", notes);
-
-/* Getting daily notes */
-const dailyNotes = await daily.findAll();
-dailyNotes.forEach((note) => searchedNotes.value.push({...note, isDaily: true}));
-console.log("DailySearch: ", dailyNotes);
+  /* Getting daily notes */
+  const dailyNotes = await daily.findAll();
+  dailyNotes.forEach((note) => searchedNotes.value.push({...note, isDaily: true}));
+  console.log("DailySearch: ", dailyNotes);
+})
 
 const searchNotes = (notesCollection, searchParams) => {
   const searchValues = searchParams.toLowerCase().split(" ");

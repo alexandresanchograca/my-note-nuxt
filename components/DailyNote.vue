@@ -25,7 +25,24 @@ const isNoteSaved = ref(true);
 const isNewlyLoadedNote = ref(true);
 const isDocChanged = ref(false);
 const router = useRouter();
-const {find, saveOrUpdate, remove, error, isPending} = useDatabaseDao().daily;
+
+
+let find, saveOrUpdate, remove, error, isPending;
+onMounted(async () => {
+  ({find, saveOrUpdate, remove, error, isPending} = useDatabaseDao().daily);
+
+  watch(props, handlePropsChange);
+
+  const unWatch = watch(note, () => {
+    if (!isNewlyLoadedNote.value && !isDocChanged.value) {
+      isNoteSaved.value = false;
+    } else {
+      isNewlyLoadedNote.value = false;
+      isDocChanged.value = false;
+    }
+  });
+});
+
 
 const handleSubmit = async () => {
   if (!note.value) {
@@ -81,19 +98,6 @@ const handlePropsChange = () => {
     handleGetDoc();
   }
 };
-
-onBeforeMount(async () => {
-  watch(props, handlePropsChange);
-
-  const unWatch = watch(note, () => {
-    if (!isNewlyLoadedNote.value && !isDocChanged.value) {
-      isNoteSaved.value = false;
-    } else {
-      isNewlyLoadedNote.value = false;
-      isDocChanged.value = false;
-    }
-  });
-});
 
 const increaseFontSize = () => {
   fontSize.value++;

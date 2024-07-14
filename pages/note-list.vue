@@ -28,15 +28,20 @@ import NotePreview from "@/components/NotePreview.vue";
 import {Timestamp} from "@firebase/firestore";
 import useDatabaseDao from "~/composables/daos/database/databaseDao.ts";
 
-const db = useFirestore();
 const router = useRouter();
-const {updateDocument} = useDoc(db, "shared-notes");
+const notes = ref(null);
 
-const {find, findAll, saveOrUpdate, error, isPending} = useDatabaseDao().note;
+let find, findAll, saveOrUpdate, error, isPending;
+onMounted(async () => {
+  ({find, findAll, saveOrUpdate, error, isPending} = useDatabaseDao().note);
 
-const notes = await findAll();
+  console.log("findAll", findAll)
 
-console.log("note-list: ", notes);
+  notes.value = await findAll();
+
+  console.log("note-list: ", notes);
+})
+
 
 const startDrag = (event, index) => {
   event.dataTransfer.setData("noteIndex", index);
@@ -61,12 +66,12 @@ const onDrop = async (event, index) => {
       ? targetNote.modifiedAt.seconds - 1
       : Timestamp.fromDate(new Date()).seconds;
 
-  await updateDocument(grabbedNote.id, {modifiedAt: grabbedNote.modifiedAt});
+  await saveOrUpdate(grabbedNote.id, {modifiedAt: grabbedNote.modifiedAt});
 
   const nextNote = notes.value[index + 1];
   if (nextNote) {
     nextNote.modifiedAt.seconds -= 1;
-    await updateDocument(nextNote.id, {modifiedAt: nextNote.modifiedAt});
+    await saveOrUpdate(nextNote.id, {modifiedAt: nextNote.modifiedAt});
   }
 };
 

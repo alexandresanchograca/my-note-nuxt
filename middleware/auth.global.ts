@@ -1,6 +1,4 @@
-import {getCurrentUser} from "vuefire";
-import path from "node:path";
-import type {RouteLocationNormalizedGeneric} from "vue-router";
+import userStateDao from "~/composables/daos/userStateDao";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
     //No need to auth on this paths
@@ -8,12 +6,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         return;
     }
 
-    const userState = useState('userState', () => null);
-
+    const userState = useState('userDetails', () => null);
     try {
         //Server-side auth check
         if (import.meta.server) {
-            const hasAccess = await $fetch("/api/auth", {
+            const hasAccess = await $fetch(`/api/v1/${useRuntimeConfig().public.databaseOption}-auth`, {
                 headers: useRequestHeaders(["cookie"]),
             });
 
@@ -22,10 +19,23 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
             }
 
             //Defining our user
+            console.log("userCookie", hasAccess);
             userState.value = hasAccess;
 
         } else { //Client-side auth check
-            const user = await getCurrentUser()
+            // const user = await getCurrentUser()
+            const user = userStateDao();
+
+            const dbConnection = useState<DBAuth>("dbConnection");
+
+            if (!dbConnection.value) {
+                dbConnection.value = {
+                    fbDb: useFirestore(),
+                    fbAuth: useFirebaseAuth(),
+                    db: useSupabaseClient(),
+                    auth: useSupabaseClient().auth,
+                }
+            }
 
             if (!user) {
                 throw new Error("Client: User not authenticated.");

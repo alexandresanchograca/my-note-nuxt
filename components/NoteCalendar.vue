@@ -20,23 +20,24 @@ const attrs = ref(null);
 
 const selectedDate = defineModel();
 
-const {findAll, error, isPending} = useDatabaseDao().daily;
 
 const assignSelectedDate = () => {
   selectedDate.value = date.value.toISOString().substring(0, 10);
 };
 
-const docs = await findAll();
-const dates = docs.map((doc) => doc.title);
+onMounted(async () => {
+  const {findAll, error, isPending} = useDatabaseDao().daily;
 
-attrs.value = [
-  {
-    dot: true,
-    dates,
-  },
-];
+  const docs = await findAll();
+  const dates = docs.map((doc) => doc.title);
 
-onMounted(() => {
+  attrs.value = [
+    {
+      dot: true,
+      dates,
+    },
+  ];
+
   if (!selectedDate.value) {
     assignSelectedDate();
   } else {

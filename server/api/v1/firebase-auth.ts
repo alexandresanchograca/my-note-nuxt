@@ -1,8 +1,9 @@
 import admin from "firebase-admin";
 import createFirebaseApp from "~/server/utils/firebaseApp";
+import {DecodedIdToken} from "firebase-admin/auth";
 
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<UserCreds> => {
     const app = await createFirebaseApp();
     const userCookie = event.headers.get("cookie");
 
@@ -15,13 +16,16 @@ export default defineEventHandler(async (event) => {
             );
         }
 
-        const hasSession = await admin.auth().verifySessionCookie(sessionCookie);
+        const hasSession: DecodedIdToken = await admin.auth().verifySessionCookie(sessionCookie);
 
         if (!hasSession) {
             throw new Error("User cookie is not valid.");
         }
 
-        return hasSession;
+        return {
+            uid: hasSession.uid,
+            email: hasSession.email,
+        };
     } catch (err) {
         console.log(err.message);
         setResponseStatus(event, 401);
