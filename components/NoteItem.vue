@@ -24,19 +24,17 @@
 </template>
 
 <script setup>
-import {Timestamp} from "@firebase/firestore";
 import AddUsers from "./AddUsers.vue";
+import useDatabaseDao from "~/composables/daos/database/databaseDao.ts";
 
 const props = defineProps(["noteId"]);
 
-const db = useFirestore();
 const note = ref("");
 const fontSize = ref(16);
 const isNoteSaved = ref(true);
-const isDocChanged = ref(false);
 const router = useRouter();
-const {getDocumentRealtime, setDocument, deleteDocument, error, isPending} =
-    useDoc(db, "shared-notes");
+
+const {find, saveOrUpdate, error, isPending} = useDatabaseDao().note;
 
 const handleSubmit = async () => {
   note.value.users = note.value.users
@@ -50,10 +48,10 @@ const handleSubmit = async () => {
 
   let savedNote = {
     ...note.value,
-    modifiedAt: Timestamp.fromDate(new Date()),
+    modifiedAt: new Date(),
   };
 
-  await setDocument(props.noteId, savedNote);
+  await saveOrUpdate(props.noteId, savedNote);
 
   if (error.value) {
     return;
@@ -67,22 +65,15 @@ const handleView = async () => {
   router.push({name: "viewer", state: {payload: note.value.payload}});
 };
 
-onBeforeMount(() => {
-  const {document: doc} = getDocumentRealtime(props.noteId);
-
-  watch(doc, () => {
-    isDocChanged.value = true;
-    note.value = doc.value;
-  });
+onBeforeMount(async () => {
+  const noteDoc = await find(props.noteId);
+  note.value = noteDoc;
+  console.log(noteDoc);
 
   watch(
       note,
       () => {
-        if (!isDocChanged.value) {
-          isNoteSaved.value = false;
-        } else {
-          isDocChanged.value = false;
-        }
+        isNoteSaved.value = false;
       },
       {deep: true}
   );

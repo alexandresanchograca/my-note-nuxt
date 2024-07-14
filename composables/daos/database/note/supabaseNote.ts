@@ -6,7 +6,7 @@ const supabaseNote = (): BasicDao<Note> => {
 
     //Instance related variables
     const user = useState("userDetails");
-    const collectionName = "notes";
+    const collectionName = "shared_notes";
     const error = ref("");
     const isPending = ref(false);
 
@@ -16,8 +16,20 @@ const supabaseNote = (): BasicDao<Note> => {
 
         try {
             const {data: note, error: fetchError} = await db
-                .from(collectionName)
-                .select('*')
+                .from("shared_notes")
+                .select(`
+                    user_id,
+                    notes (
+                        id,
+                        title,
+                        payload,
+                        modifiedAt,
+                        owner:profiles(
+                        id,
+                        email
+                        )
+                    )
+                  `)
                 .eq("note_id", id)
                 .single();
 
@@ -25,7 +37,12 @@ const supabaseNote = (): BasicDao<Note> => {
                 throw fetchError;
             }
 
-            return note;
+            const massagedNote = {
+                ...note?.notes,
+                users: []
+            }
+
+            return massagedNote;
         } catch (err) {
             console.error(err);
             error.value = "Couldn't retrieve note, try again later...";
