@@ -142,32 +142,64 @@ const supabaseNote = (): BasicDao<Note> => {
         }
     }
 
-    const saveOrUpdate = async (id: string, content: PersistentNote) => {
+    const saveOrUpdate = async (id: string, note: Note): Promise<void> => {
         error.value = "";
         isPending.value = true;
 
         try {
-            let result;
-            if (id) {
+            let noteId = id;
+
+            if (noteId) {
                 // Update existing note
-                result = await db
-                    .from(collectionName)
-                    .update(content)
-                    .eq('note_id', id);
+                const {data: updateData, error: updateError} = await db
+                    .from("notes")
+                    .update({
+                        title: note.title,
+                        payload: note.payload,
+                        modifiedAt: note.modifiedAt.toISOString()
+                    })
+                    .eq("id", noteId)
+                    .select();
+
+                if (updateError) {
+                    throw updateError;
+                }
             } else {
                 // Insert new note
-                result = await db
-                    .from(collectionName)
-                    .insert(content);
+                const {data: insertData, error: insertError} = await db
+                    .from("notes")
+                    .insert({
+                        title: note.title,
+                        payload: note.payload,
+                        owner: user.value.uid,
+                        modifiedAt: note.modifiedAt.toISOString()
+                    })
+                    .select();
+
+                if (insertError) {
+                    throw insertError;
+                }
+
+                noteId = insertData?.[0]?.note_id;
             }
 
-            const {data, error: upsertError} = result;
+            // Insert shared users into the shared_notes table
+            const sharedUsers = note.users.map(sharedUser => ({
+                note_id: noteId,
+                user_id: sharedUser
+            }));
 
-            if (upsertError) {
-                throw upsertError;
+            if (sharedUsers.length > 0) {
+                const {error: sharedError} = await db
+                    .from("shared_notes")
+                    .insert(sharedUsers);
+
+                if (sharedError) {
+                    throw sharedError;
+                }
             }
 
-            return data;
+            return {id: noteId};
         } catch (err) {
             console.error(err);
             error.value = "Couldn't save or update note, try again later...";

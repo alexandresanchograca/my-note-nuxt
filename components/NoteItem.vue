@@ -68,7 +68,6 @@ const handleView = async () => {
 onBeforeMount(async () => {
   const noteDoc = await find(props.noteId);
   note.value = noteDoc;
-  console.log(noteDoc);
 
   watch(
       note,
