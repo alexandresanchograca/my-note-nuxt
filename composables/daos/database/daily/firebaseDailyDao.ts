@@ -48,7 +48,7 @@ const firebaseDailyNote = () => {
 
             const querySnapshot = await getDocs(q);
 
-            return querySnapshot.docs.map((doc) => doc.data());
+            return querySnapshot.docs.map((doc) => ({...doc.data(), title: doc.id}));
         } catch (err) {
             error.value = err.message;
         } finally {

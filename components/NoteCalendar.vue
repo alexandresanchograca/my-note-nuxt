@@ -13,30 +13,28 @@
 
 <script setup>
 import {DatePicker} from "v-calendar";
+import useDatabaseDao from "~/composables/daos/database/databaseDao.ts";
 
 const date = ref(new Date());
 const attrs = ref(null);
-const user = useState("userDetails");
-const db = useFirestore();
 
 const selectedDate = defineModel();
 
-const {getDocumentIdsRealtime} = useCol(db);
+const {findAll, error, isPending} = useDatabaseDao().daily;
 
 const assignSelectedDate = () => {
   selectedDate.value = date.value.toISOString().substring(0, 10);
 };
 
-const {documentIds} = getDocumentIdsRealtime(`notes/${user.value.uid}/daily`);
+const docs = await findAll();
+const dates = docs.map((doc) => doc.title);
 
-watch(documentIds, () => {
-  attrs.value = [
-    {
-      dot: true,
-      dates: documentIds.value,
-    },
-  ];
-});
+attrs.value = [
+  {
+    dot: true,
+    dates,
+  },
+];
 
 onMounted(() => {
   if (!selectedDate.value) {

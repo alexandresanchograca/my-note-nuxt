@@ -61,7 +61,6 @@ const supabaseDailyNote = () => {
 
         try {
             const noteInDb = await find(id);
-            console.log("save daily: ", noteInDb);
 
             let result;
             if (noteInDb) {
