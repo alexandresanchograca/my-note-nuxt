@@ -1,11 +1,11 @@
 import {ref} from "vue";
 
-const supabaseDailyNote = () => {
+const supabaseNote = () => {
     //Assigning db
     const {db} = useState<DBAuth>("dbConnection").value;
 
     //Instance related variables
-    const collectionName = "daily_notes";
+    const collectionName = "notes";
     const error = ref("");
     const isPending = ref(false);
 
@@ -17,7 +17,7 @@ const supabaseDailyNote = () => {
             const {data: note, error: fetchError} = await db
                 .from(collectionName)
                 .select('*')
-                .eq("daily_date", id)
+                .eq("note_id", id)
                 .single();
 
             if (fetchError) {
@@ -44,7 +44,7 @@ const supabaseDailyNote = () => {
                 result = await db
                     .from(collectionName)
                     .update(content)
-                    .eq('daily_date', id);
+                    .eq('note_id', id);
             } else {
                 // Insert new note
                 result = await db
@@ -75,7 +75,7 @@ const supabaseDailyNote = () => {
             const {data, error: deleteError} = await db
                 .from(collectionName)
                 .delete()
-                .eq('daily_date', id);
+                .eq('note_id', id);
 
             if (deleteError) {
                 throw deleteError;
@@ -100,4 +100,4 @@ const supabaseDailyNote = () => {
     };
 };
 
-export default supabaseDailyNote;
+export default supabaseNote;

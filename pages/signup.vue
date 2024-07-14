@@ -20,15 +20,17 @@
 </template>
 
 <script setup>
+import useAuthDao from "~/composables/daos/authentication/authDao.ts";
+
 const email = ref("");
 const password = ref("");
 const router = useRouter();
-const auth = useFirebaseAuth();
 
-const {error, isPending, signup} = useAuth();
+const authDao = useAuthDao();
+const {error, isPending, signup} = authDao;
 
 const handleSubmit = async () => {
-  const res = await signup(auth, email.value, password.value);
+  const res = await signup(email.value, password.value);
 
   if (error.value) {
     console.log(error.value);

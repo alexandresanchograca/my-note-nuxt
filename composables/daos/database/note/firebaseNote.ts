@@ -7,14 +7,13 @@ import {
 } from "firebase/firestore";
 import {ref} from "vue";
 
-const firebaseDailyNote = () => {
+const firebaseNote = () => {
     //Assigning db
     const {fbDb: db} = useState<DBAuth>("dbConnection").value;
 
     //Instance related variables
     const user = useState("userDetails");
     const collectionName = "shared-notes";
-    const subCollectionName = "daily";
     const error = ref("");
     const isPending = ref(false);
 
@@ -23,8 +22,7 @@ const firebaseDailyNote = () => {
         isPending.value = true;
 
         try {
-            const collectionPath = `${collectionName}/${id}/${subCollectionName}`;
-            const docRef = doc(db, collectionPath, id);
+            const docRef = doc(db, collectionName, id);
             return await getDoc(docRef);
         } catch (err) {
             console.error(err);
@@ -62,8 +60,7 @@ const firebaseDailyNote = () => {
         isPending.value = true;
 
         try {
-            const collectionPath = `${collectionName}/${id}/${subCollectionName}`;
-            const docRef = doc(db, collectionPath, id);
+            const docRef = doc(db, collectionName, id);
             return await setDoc(docRef, content);
         } catch (err) {
             error.value = err.message;
@@ -76,8 +73,7 @@ const firebaseDailyNote = () => {
         isPending.value = true;
 
         try {
-            const collectionPath = `${collectionName}/${id}/${subCollectionName}`;
-            const docRef = doc(db, collectionPath, id);
+            const docRef = doc(db, collectionName, id);
             return await deleteDoc(docRef);
         } catch (err) {
             error.value = err.message;
@@ -95,4 +91,4 @@ const firebaseDailyNote = () => {
     };
 };
 
-export default firebaseDailyNote;
+export default firebaseNote;
