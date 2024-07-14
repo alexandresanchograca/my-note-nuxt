@@ -6,9 +6,6 @@
 </template>
 
 <script setup>
-import useNoteAgent from "@/composables/useAI.js";
-import useAIActions from "@/composables/useActions";
-
 import {marked} from "marked";
 import prism from "prismjs";
 
@@ -20,8 +17,10 @@ import "prismjs/plugins/toolbar/prism-toolbar.css"; // required for the followin
 import "prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js"; // show copy button
 import "prismjs/plugins/show-language/prism-show-language.js";
 
+import chatbotAgent from "~/composables/chatbotAgent.ts";
+import getAIActions from "~/composables/getAIActions.ts";
+
 const messages = ref([]);
-const user = useState("userState");
 
 marked.use({
   highlight: (code, lang) => {
@@ -46,11 +45,9 @@ onMounted(() => {
     message: formattedMessage,
   });
 
-  const app = useFirebaseApp();
-  const db = useFirestore();
+  const agentData = chatbotAgent(true);
+  const actionData = getAIActions();
 
-  const agentData = useNoteAgent(user, db, app, true);
-  const actionData = useAIActions(user, db);
 
   ask = agentData.ask;
   error = agentData.error;

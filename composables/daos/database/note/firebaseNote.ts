@@ -1,4 +1,5 @@
 import {
+    addDoc,
     collection,
     deleteDoc,
     doc,
@@ -6,6 +7,7 @@ import {
     setDoc, where,
 } from "firebase/firestore";
 import {ref} from "vue";
+import {Timestamp} from "@firebase/firestore";
 
 const firebaseNote = () => {
     //Assigning db
@@ -55,6 +57,25 @@ const firebaseNote = () => {
         }
     }
 
+    const save = async (note: Note): Promise<CreatedDocument | undefined> => {
+        error.value = "";
+        isPending.value = true;
+
+        const firebaseNote = {
+            ...note,
+            modifiedAt: Timestamp.fromDate(note.modifiedAt),
+        }
+
+        try {
+            const res = await addDoc(collection(db, collectionName), firebaseNote);
+            return {id: res.id};
+        } catch (err) {
+            error.value = err.message;
+        } finally {
+            isPending.value = false;
+        }
+    }
+
     const saveOrUpdate = async (id: string, content: PersistentNote) => {
         error.value = "";
         isPending.value = true;
@@ -85,6 +106,7 @@ const firebaseNote = () => {
     return {
         find,
         findAll,
+        save,
         saveOrUpdate,
         remove,
         error,

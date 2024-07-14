@@ -15,8 +15,6 @@
 <script setup>
 import useDatabaseDao from "~/composables/daos/database/databaseDao.ts";
 
-const db = useFirestore();
-
 const user = useState("userDetails");
 const searchValue = ref("");
 const searchedNotes = ref([]);

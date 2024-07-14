@@ -17,7 +17,7 @@ const supabaseDailyNote = () => {
             const {data: note, error: fetchError} = await db
                 .from(collectionName)
                 .select('*')
-                .eq("daily_date", id)
+                .eq("title", id)
                 .single();
 
             if (fetchError) {
@@ -66,7 +66,7 @@ const supabaseDailyNote = () => {
                 result = await db
                     .from(collectionName)
                     .update(content)
-                    .eq('daily_date', id);
+                    .eq('title', id);
             } else {
                 // Insert new note
                 result = await db
@@ -97,7 +97,7 @@ const supabaseDailyNote = () => {
             const {data, error: deleteError} = await db
                 .from(collectionName)
                 .delete()
-                .eq('daily_date', id);
+                .eq('title', id);
 
             if (deleteError) {
                 throw deleteError;

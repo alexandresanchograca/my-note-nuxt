@@ -76,6 +76,55 @@ const supabaseNote = (): BasicDao<Note> => {
         }
     };
 
+    const save = async (note: Note): Promise<void> => {
+        error.value = "";
+        isPending.value = true;
+
+        try {
+            // Insert the note into the notes table first
+            const {data: noteData, error: noteError} = await db
+                .from("notes")
+                .insert({
+                    title: note.title,
+                    payload: note.payload,
+                    owner: user.value.uid,
+                    modifiedAt: note.modifiedAt.toISOString()
+                })
+                .select();
+
+            if (noteError) {
+                throw noteError;
+            }
+
+            const noteId = noteData?.[0]?.note_id;
+
+            // Insert shared users into the shared_notes table
+            const sharedUsers = note.users.map(sharedUser => ({
+                note_id: noteId,
+                user_id: sharedUser
+            }));
+
+            console.log("sharedUsers: ", sharedUsers);
+
+            if (sharedUsers.length > 0) {
+                const {error: sharedError} = await db
+                    .from("shared_notes")
+                    .insert(sharedUsers);
+
+                if (sharedError) {
+                    throw sharedError;
+                }
+            }
+
+            return noteData[0];
+        } catch (err) {
+            console.error(err);
+            error.value = "Couldn't save or update note, try again later...";
+        } finally {
+            isPending.value = false;
+        }
+    }
+
     const saveOrUpdate = async (id: string, content: PersistentNote) => {
         error.value = "";
         isPending.value = true;
@@ -137,6 +186,7 @@ const supabaseNote = (): BasicDao<Note> => {
     return {
         find,
         findAll,
+        save,
         saveOrUpdate,
         remove,
         error,

@@ -20,8 +20,12 @@ declare global {
         username?: string | null;
     }
 
+    type CreatedDocument = {
+        id: string
+    }
+
     type BasicDao<T> = {
-        save?(id: string, content: T);
+        save?(content: T): CreatedDocument;
         update?(id: string, content: T);
         saveOrUpdate(id: string, content: T);
         find(id: string): Promise<T | undefined>;
@@ -29,10 +33,10 @@ declare global {
         remove(id: string);
         error: Ref<any>;
         isPending: Ref<boolean>;
-    }
+    };
 
     type BasicNote = {
-        modifiedAt: Timestamp;
+        modifiedAt: Date;
         payload: string;
     }
 
@@ -48,6 +52,7 @@ declare global {
         users: Array<any>;
     }
 
+
     type AuthDao = {
         login(auth, email, password): Promise<UserCreds | undefined>;
         signup(auth, email, password): Promise<UserCreds | undefined>;
@@ -55,6 +60,10 @@ declare global {
         error: Ref<any>;
         isPending: Ref<boolean>;
     } | null;
+
+    type NoteDao = BasicDao<Note> & {
+        save(content: Note): CreatedDocument;
+    }
 
     type DatabaseDao = {
         persistent: BasicDao<PersistentNote>;
