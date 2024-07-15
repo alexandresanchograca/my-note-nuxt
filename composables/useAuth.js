@@ -1,5 +1,7 @@
 import {ref} from "vue";
 import {
+    setPersistence,
+    inMemoryPersistence,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     signOut,
@@ -13,14 +15,26 @@ const login = async (auth, email, password) => {
     isPending.value = true;
 
     try {
+        // await setPersistence(auth, inMemoryPersistence);
         const res = await signInWithEmailAndPassword(auth, email, password);
 
         if (!res) {
             throw new Error("Couldn't sign in...");
         }
 
+        const idToken = await res.user.getIdToken();
+        //TODO implement CSRF attack prevention
+
+        const sessionCookie = await $fetch("/api/v1/sign-in", {
+            method: "POST",
+            body: {
+                idToken,
+            }
+        })
+
         return res;
     } catch (err) {
+        console.log(err.message);
         error.value = "Username or password are incorrect, please try again...";
     } finally {
         isPending.value = false;
@@ -49,7 +63,10 @@ const signup = async (auth, email, password) => {
 const logout = async (auth) => {
     error.value = null;
     try {
-        return await signOut(auth);
+        return await $fetch("/api/v1/sign-out", {
+            method: "GET",
+            headers: useRequestHeaders(['cookie']),
+        });
     } catch (err) {
         error.value = err.message;
     }

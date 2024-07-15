@@ -18,7 +18,7 @@ const nuxtApp = useNuxtApp()
 //OnMounted hooks only get called on client
 // Checking if user is authed
 onMounted(() => {
-  const user = useCurrentUser()
+  const user = useState("userState");
 
   watch(user, (user, prevUser) => {
     if (prevUser && !user) {
