@@ -26,7 +26,7 @@ const fontSize = ref(16);
 const isNoteSaved = ref(true);
 const isDocChanged = ref(false);
 const router = useRouter();
-const user = useCurrentUser()
+const user = useState("userState")
 const db = useFirestore();
 
 const {

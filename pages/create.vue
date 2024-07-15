@@ -19,7 +19,7 @@
 import {Timestamp} from "@firebase/firestore";
 
 const router = useRouter();
-const user = useCurrentUser();
+const user = useState("userState");
 const db = useFirestore();
 
 const note = ref({

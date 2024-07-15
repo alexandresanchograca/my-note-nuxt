@@ -23,7 +23,7 @@ const fontSize = ref(16);
 const isNoteSaved = ref(true);
 const isNewlyLoadedNote = ref(true);
 const isDocChanged = ref(false);
-const user = useCurrentUser()
+const user = useState("userState");
 const db = useFirestore();
 
 const {getDocumentRealtime, setDocument, deleteDocument, error, isPending} =
