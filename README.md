@@ -11,6 +11,7 @@ TODO:
 
 - Mover toda a logica de obter dados para API e usar os server/admin SDK's dos serviços para obter dados. Autenticar o
   user com a cookie
+- Usar o Pinia como store, ou organizar o useState
 
 ```angular2html
 DB_CHOICE="firebase"

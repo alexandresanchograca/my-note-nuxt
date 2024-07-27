@@ -3,7 +3,7 @@ export default defineNuxtConfig({
     devtools: {enabled: true},
     runtimeConfig: {
         public: {
-            databaseOption: 'supabase',
+            databaseOption: 'firebase',
         }
     },
     nitro: {
